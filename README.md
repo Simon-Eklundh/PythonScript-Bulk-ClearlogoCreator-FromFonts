@@ -1,3 +1,61 @@
+# New version that runs in docker
+
+## what is it
+
+clearlogo_creator.py runs on two sets of paths.
+
+1. just like the old version, it runs on local paths, using the folder name to create a clearlogo.
+2. if the folders are instead named based on youtube ids (like how tubearchivist names media folders), it checks with youtube to get the correct channel name from the channel id
+
+in order to do so, it's split in two env variables. 
+1. local_path for the path in the container that should be treated like the name is "correct"
+2. youtube_path for the path where the folders have youtube ids as names
+
+## options
+
+when running the script/container, you have two options for paths as mentioned above. Additionally, you also have an option of mode.
+there are a total of four modes that can be chosen based on the options below.
+
+|                | **dry-run: off** | **dry-run: on** |
+|----------------|------------------|-----------------|
+| **update**     | `update`         | `update-dry`    |
+| **replace**    | `replace`        | `replace-dry`   |
+
+update means only add clearlogo files if they're missing. replace replaces existing ones as well.
+dry (dry-run) means we don't actually update/replace, just simulate to show which items would be hit. this is a good first step for verifying that it's correct before running for real.
+
+## how to run
+
+
+### docker
+you can run my version which uses BebasNeue-Regular.ttf in docker-compose like so:
+```yaml
+services:
+  clearlogo_creator:
+    environment:
+      - MODE=update
+      - local_path=/local
+      - youtube_path=/youtube
+    volumes:
+      - your_tubearchivist_path_here':'/youtube':'rw
+      - your_local_path_here:/local
+    image: docker.io/simoneklundh/clearlogo_creator
+networks: {}
+```
+or if you want to change the font you can mount a directory with one or more font files in /app/fonts/
+
+### python
+
+```bash
+pip install -r requirements.txt
+local_path=/local_path youtube_path=/youtube_path MODE=the_mode_you_want python clearlogo_creator
+```
+
+
+# Old version that only acts on folder names below
+
+This version uses create_clearLogosPATH.py or .bat and only needs the pillow dependency
+
 Note: This script is compatible with the [Jellyfin VideoOSD Artwork Display](https://github.com/chrissix666/Jellyfin-VideoOSD-Artwork-Display).
 
 # Bulk Subfolder Clearlogo Creator From Fonts
