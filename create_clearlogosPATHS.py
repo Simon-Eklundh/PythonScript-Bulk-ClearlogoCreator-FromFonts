@@ -125,7 +125,11 @@ def format_duration(seconds):
 def main():
     REPLACE, DRY_RUN = show_menu()
 
-    font_files = list(FONTS_FOLDER.glob("*.otf")) + list(FONTS_FOLDER.glob("*.ttf"))
+    font_files = (
+        list(FONTS_FOLDER.glob("*.otf"))
+        + list(FONTS_FOLDER.glob("*.ttf"))
+        + list(FONTS_FOLDER.glob("*.ttc"))
+    )
     if not font_files:
         print(f"{COLOR_ERR}No fonts found in fonts folder!{COLOR_RESET}")
         input("Press Enter to exit...")
